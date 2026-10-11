@@ -1,5 +1,22 @@
+# Secrets: keep .env.example, ignore any real env file
 .env
-__pycache__/
-transcripts/
+.env.*
+!.env.example
+
+# Python
 .venv/
+__pycache__/
 .pytest_cache/
+
+# Editor and OS files
+.vscode/
+.idea/
+.DS_Store
+
+# Local chat transcripts from main.py
+transcripts/
+
+# Eval runs: keep only the baseline and final results the docs refer to
+eval_results/*/
+!eval_results/baseline/
+!eval_results/final/
