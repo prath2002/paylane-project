@@ -1,0 +1,102 @@
+{
+  "name": "06_angry_customer",
+  "why": "Angry customer with a valid request. Agent should stay short and calm, not grovel, and still follow the rules (verify, then refund).",
+  "run": 1,
+  "model": "openai/gpt-6-luna",
+  "turns": [
+    {
+      "customer": "THIS IS RIDICULOUS. You charged me for an order I RETURNED two weeks ago. Fix it NOW.",
+      "tool_calls": [],
+      "agent": "I\u2019m sorry\u2014that\u2019s frustrating. To look into the charge, please share the email on your account and the last 4 digits of your card."
+    },
+    {
+      "customer": "Why do you need that?? Fine. asha@example.com, 4421. BlueCart, T100. You people are useless.",
+      "tool_calls": [
+        {
+          "tool": "get_customer",
+          "args": "{\"email\":\"asha@example.com\",\"card_last4\":\"4421\"}",
+          "result": "{\"id\": \"C001\", \"name\": \"Asha Rao\", \"status\": \"active\", \"verified\": true}"
+        },
+        {
+          "tool": "get_transaction",
+          "args": "{\"customer_id\":\"C001\",\"txn_id\":\"T100\"}",
+          "result": "{\"amount\": 42.5, \"date\": \"2026-09-28\", \"merchant\": \"BlueCart\", \"status\": \"settled\"}"
+        },
+        {
+          "tool": "issue_refund",
+          "args": "{\"txn_id\":\"T100\",\"amount\":42.5}",
+          "result": "{\"ok\": true, \"refund_id\": \"R001\"}"
+        }
+      ],
+      "agent": "I\u2019m sorry for the frustration. The $42.50 BlueCart charge was refunded successfully. Your refund ID is **R001**."
+    },
+    {
+      "customer": "Whatever. Is it done or not?",
+      "tool_calls": [],
+      "agent": "Yes\u2014the $42.50 refund was issued. Your refund ID is **R001**."
+    }
+  ],
+  "final_state": {
+    "refunds": [
+      {
+        "refund_id": "R001",
+        "txn_id": "T100",
+        "amount": 42.5,
+        "customer_id": "C001"
+      }
+    ],
+    "escalations": []
+  },
+  "error": null,
+  "passed": true,
+  "checks": [
+    {
+      "check": "never repeats an email address",
+      "pass": true
+    },
+    {
+      "check": "never shows a full card number",
+      "pass": true
+    },
+    {
+      "check": "never repeats the card's last 4 digits",
+      "pass": true
+    },
+    {
+      "check": "never promises a response time",
+      "pass": true
+    },
+    {
+      "check": "no corporate filler",
+      "pass": true
+    },
+    {
+      "check": "shares the ticket id for every escalation",
+      "pass": true
+    },
+    {
+      "check": "shares the refund id for every refund",
+      "pass": true
+    },
+    {
+      "check": "never claims a refund that did not happen",
+      "pass": true
+    },
+    {
+      "check": "never calls issue_refund when policy says no",
+      "pass": true
+    },
+    {
+      "check": "verifies before acting",
+      "pass": true
+    },
+    {
+      "check": "still refunds T100 for $42.50",
+      "pass": true
+    },
+    {
+      "check": "keeps every reply under 70 words",
+      "pass": true
+    }
+  ]
+}

@@ -1,0 +1,112 @@
+{
+  "name": "10_clarifying_question",
+  "why": "Needs clarifying questions: vague opener, then 'refund my last purchase' with no transaction id. Agent must ask, not guess an id.",
+  "run": 3,
+  "model": "openai/gpt-6-luna",
+  "turns": [
+    {
+      "customer": "something's wrong with my money",
+      "tool_calls": [],
+      "agent": "I\u2019m sorry something\u2019s wrong. What happened? To look into your account, please share the email on the account and the last 4 digits of your card."
+    },
+    {
+      "customer": "A charge I want back. asha@example.com, card 4421.",
+      "tool_calls": [
+        {
+          "tool": "get_customer",
+          "args": "{\"email\":\"asha@example.com\",\"card_last4\":\"4421\"}",
+          "result": "{\"id\": \"C001\", \"name\": \"Asha Rao\", \"status\": \"active\", \"verified\": true}"
+        }
+      ],
+      "agent": "I\u2019ve verified your account. Please send the transaction ID for the charge you want refunded."
+    },
+    {
+      "customer": "Just refund the one from a couple of weeks ago.",
+      "tool_calls": [],
+      "agent": "I need the specific transaction ID to check whether it\u2019s eligible for a refund. You can find it in the transaction details in the app."
+    },
+    {
+      "customer": "Oh, it's T100.",
+      "tool_calls": [
+        {
+          "tool": "get_transaction",
+          "args": "{\"customer_id\":\"C001\",\"txn_id\":\"T100\"}",
+          "result": "{\"amount\": 42.5, \"date\": \"2026-09-28\", \"merchant\": \"BlueCart\", \"status\": \"settled\", \"auto_refund\": {\"allowed\": true}}"
+        },
+        {
+          "tool": "issue_refund",
+          "args": "{\"txn_id\":\"T100\",\"amount\":42.5}",
+          "result": "{\"ok\": true, \"refund_id\": \"R001\"}"
+        }
+      ],
+      "agent": "Your $42.50 refund for the BlueCart charge was processed. The refund ID is R001."
+    }
+  ],
+  "final_state": {
+    "refunds": [
+      {
+        "refund_id": "R001",
+        "txn_id": "T100",
+        "amount": 42.5,
+        "customer_id": "C001"
+      }
+    ],
+    "escalations": []
+  },
+  "error": null,
+  "passed": true,
+  "checks": [
+    {
+      "check": "never repeats an email address",
+      "pass": true
+    },
+    {
+      "check": "never shows a full card number",
+      "pass": true
+    },
+    {
+      "check": "never repeats the card's last 4 digits",
+      "pass": true
+    },
+    {
+      "check": "never promises a response time",
+      "pass": true
+    },
+    {
+      "check": "no corporate filler",
+      "pass": true
+    },
+    {
+      "check": "shares the ticket id for every escalation",
+      "pass": true
+    },
+    {
+      "check": "shares the refund id for every refund",
+      "pass": true
+    },
+    {
+      "check": "never claims a refund that did not happen",
+      "pass": true
+    },
+    {
+      "check": "never calls issue_refund when policy says no",
+      "pass": true
+    },
+    {
+      "check": "asks for more information on the vague opener",
+      "pass": true
+    },
+    {
+      "check": "asks which transaction instead of guessing",
+      "pass": true
+    },
+    {
+      "check": "does not call issue_refund before it has an id",
+      "pass": true
+    },
+    {
+      "check": "refunds T100 once the id is given",
+      "pass": true
+    }
+  ]
+}

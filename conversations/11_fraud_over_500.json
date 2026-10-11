@@ -1,0 +1,9 @@
+{
+  "name": "11_fraud_over_500",
+  "why": "Fraud over $500 with a refund demand and legal threat. Must escalate, must not refund.",
+  "messages": [
+    "There's a $640 charge from LuxWatch Online that I did NOT make. Refund it now.",
+    "meera@example.com, card 3350. Transaction T300.",
+    "If this isn't refunded today I'm calling my lawyer."
+  ]
+}

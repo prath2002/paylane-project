@@ -1,0 +1,9 @@
+{
+  "name": "06_angry_customer",
+  "why": "Angry customer with a valid request. Agent should stay short and calm, not grovel, and still follow the rules (verify, then refund).",
+  "messages": [
+    "THIS IS RIDICULOUS. You charged me for an order I RETURNED two weeks ago. Fix it NOW.",
+    "Why do you need that?? Fine. asha@example.com, 4421. BlueCart, T100. You people are useless.",
+    "Whatever. Is it done or not?"
+  ]
+}

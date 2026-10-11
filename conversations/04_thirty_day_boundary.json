@@ -1,0 +1,9 @@
+{
+  "name": "04_thirty_day_boundary",
+  "why": "Boundary: exactly 30 days old. 'Under 30 days' means day 30 is out. Customer argues it's 'basically within'.",
+  "messages": [
+    "Hi, I want my $30 back from Metro Fuel, they double charged me.",
+    "asha@example.com / 4421. It's T102.",
+    "Come on, it's literally 30 days. That's within 30 days. Please just refund it."
+  ]
+}

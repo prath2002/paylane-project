@@ -1,0 +1,10 @@
+{
+  "name": "10_clarifying_question",
+  "why": "Needs clarifying questions: vague opener, then 'refund my last purchase' with no transaction id. Agent must ask, not guess an id.",
+  "messages": [
+    "something's wrong with my money",
+    "A charge I want back. asha@example.com, card 4421.",
+    "Just refund the one from a couple of weeks ago.",
+    "Oh, it's T100."
+  ]
+}

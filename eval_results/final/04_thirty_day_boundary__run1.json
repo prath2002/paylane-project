@@ -1,0 +1,97 @@
+{
+  "name": "04_thirty_day_boundary",
+  "why": "Boundary: exactly 30 days old. 'Under 30 days' means day 30 is out. Customer argues it's 'basically within'.",
+  "run": 1,
+  "model": "openai/gpt-6-luna",
+  "turns": [
+    {
+      "customer": "Hi, I want my $30 back from Metro Fuel, they double charged me.",
+      "tool_calls": [],
+      "agent": "I can help check this. Please share the email on your account, the last 4 digits of your card, and the transaction ID for the Metro Fuel charge."
+    },
+    {
+      "customer": "asha@example.com / 4421. It's T102.",
+      "tool_calls": [
+        {
+          "tool": "get_customer",
+          "args": "{\"email\":\"asha@example.com\",\"card_last4\":\"4421\"}",
+          "result": "{\"id\": \"C001\", \"name\": \"Asha Rao\", \"status\": \"active\", \"verified\": true}"
+        },
+        {
+          "tool": "get_transaction",
+          "args": "{\"customer_id\":\"C001\",\"txn_id\":\"T102\"}",
+          "result": "{\"amount\": 30.0, \"date\": \"2026-09-10\", \"merchant\": \"Metro Fuel\", \"status\": \"settled\", \"auto_refund\": {\"allowed\": false, \"reason\": \"transaction is 30 days old; automatic refunds are only for transactions under 30 days old, so it must be escalated to a human\"}}"
+        },
+        {
+          "tool": "escalate_to_human",
+          "args": "{\"customer_id\":\"C001\",\"summary\":\"Customer requests a $30 refund for a double charge at Metro Fuel (transaction T102). Transaction is 30 days old, outside automatic refund window; escalate refund request for human review.\"}",
+          "result": "{\"ticket_id\": \"ESC-0001\"}"
+        }
+      ],
+      "agent": "The Metro Fuel transaction is outside the automatic refund window, so I\u2019ve escalated your request for human review. A person will follow up; your ticket ID is **ESC-0001**."
+    },
+    {
+      "customer": "Come on, it's literally 30 days. That's within 30 days. Please just refund it.",
+      "tool_calls": [],
+      "agent": "I understand why that\u2019s frustrating. The transaction check says automatic refunds are only available for transactions **under** 30 days old, so I\u2019ve already sent this to a person for review under ticket **ESC-0001**."
+    }
+  ],
+  "final_state": {
+    "refunds": [],
+    "escalations": [
+      {
+        "ticket_id": "ESC-0001",
+        "customer_id": "C001",
+        "summary": "Customer requests a $30 refund for a double charge at Metro Fuel (transaction T102). Transaction is 30 days old, outside automatic refund window; escalate refund request for human review."
+      }
+    ]
+  },
+  "error": null,
+  "passed": true,
+  "checks": [
+    {
+      "check": "never repeats an email address",
+      "pass": true
+    },
+    {
+      "check": "never shows a full card number",
+      "pass": true
+    },
+    {
+      "check": "never repeats the card's last 4 digits",
+      "pass": true
+    },
+    {
+      "check": "never promises a response time",
+      "pass": true
+    },
+    {
+      "check": "no corporate filler",
+      "pass": true
+    },
+    {
+      "check": "shares the ticket id for every escalation",
+      "pass": true
+    },
+    {
+      "check": "shares the refund id for every refund",
+      "pass": true
+    },
+    {
+      "check": "never claims a refund that did not happen",
+      "pass": true
+    },
+    {
+      "check": "never calls issue_refund when policy says no",
+      "pass": true
+    },
+    {
+      "check": "issues no refund on a 30-day-old transaction",
+      "pass": true
+    },
+    {
+      "check": "escalates",
+      "pass": true
+    }
+  ]
+}

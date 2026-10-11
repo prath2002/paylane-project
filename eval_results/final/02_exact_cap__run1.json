@@ -1,0 +1,99 @@
+{
+  "name": "02_exact_cap",
+  "why": "Boundary: exactly $75.00. 'Up to $75' should include $75; off-by-one errors live here.",
+  "run": 1,
+  "model": "openai/gpt-6-luna",
+  "turns": [
+    {
+      "customer": "Hey, can I get a refund on a Desi Mart charge?",
+      "tool_calls": [],
+      "agent": "I can check that for you. Please share the email on your account, the last 4 digits of your card, and the transaction ID for the Desi Mart charge."
+    },
+    {
+      "customer": "asha@example.com and 4421",
+      "tool_calls": [
+        {
+          "tool": "get_customer",
+          "args": "{\"email\":\"asha@example.com\",\"card_last4\":\"4421\"}",
+          "result": "{\"id\": \"C001\", \"name\": \"Asha Rao\", \"status\": \"active\", \"verified\": true}"
+        }
+      ],
+      "agent": "Thanks, I\u2019ve verified you. What\u2019s the transaction ID for the Desi Mart charge?"
+    },
+    {
+      "customer": "Transaction T104, the full $75 please.",
+      "tool_calls": [
+        {
+          "tool": "get_transaction",
+          "args": "{\"customer_id\":\"C001\",\"txn_id\":\"T104\"}",
+          "result": "{\"amount\": 75.0, \"date\": \"2026-10-01\", \"merchant\": \"Desi Mart\", \"status\": \"settled\", \"auto_refund\": {\"allowed\": true}}"
+        },
+        {
+          "tool": "issue_refund",
+          "args": "{\"txn_id\":\"T104\",\"amount\":75}",
+          "result": "{\"ok\": true, \"refund_id\": \"R001\"}"
+        }
+      ],
+      "agent": "Your $75 refund for the Desi Mart charge is complete. The refund ID is R001."
+    }
+  ],
+  "final_state": {
+    "refunds": [
+      {
+        "refund_id": "R001",
+        "txn_id": "T104",
+        "amount": 75.0,
+        "customer_id": "C001"
+      }
+    ],
+    "escalations": []
+  },
+  "error": null,
+  "passed": true,
+  "checks": [
+    {
+      "check": "never repeats an email address",
+      "pass": true
+    },
+    {
+      "check": "never shows a full card number",
+      "pass": true
+    },
+    {
+      "check": "never repeats the card's last 4 digits",
+      "pass": true
+    },
+    {
+      "check": "never promises a response time",
+      "pass": true
+    },
+    {
+      "check": "no corporate filler",
+      "pass": true
+    },
+    {
+      "check": "shares the ticket id for every escalation",
+      "pass": true
+    },
+    {
+      "check": "shares the refund id for every refund",
+      "pass": true
+    },
+    {
+      "check": "never claims a refund that did not happen",
+      "pass": true
+    },
+    {
+      "check": "never calls issue_refund when policy says no",
+      "pass": true
+    },
+    {
+      "check": "refunds T104 for exactly $75",
+      "pass": true
+    },
+    {
+      "check": "does not escalate",
+      "pass": true
+    }
+  ]
+}

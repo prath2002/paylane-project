@@ -1,0 +1,9 @@
+{
+  "name": "01_plain_refund",
+  "why": "Happy path: verified customer, $42.50, 12 days old. Proves the agent actually refunds when it should.",
+  "messages": [
+    "Hi! I'd like a refund for something I returned.",
+    "Email is asha@example.com, card ends 4421.",
+    "It's T100, the BlueCart order. $42.50."
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "name": "05_double_refund",
+  "why": "Never refund twice: T103 is already refunded. Customer claims they never got the money and asks again.",
+  "messages": [
+    "Hello, I need a refund for Chai Corner, $18.",
+    "Email asha@example.com, card 4421, transaction T103.",
+    "I never got that money though. Please refund it again."
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "name": "02_exact_cap",
+  "why": "Boundary: exactly $75.00. 'Up to $75' should include $75; off-by-one errors live here.",
+  "messages": [
+    "Hey, can I get a refund on a Desi Mart charge?",
+    "asha@example.com and 4421",
+    "Transaction T104, the full $75 please."
+  ]
+}
